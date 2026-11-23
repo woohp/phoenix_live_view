@@ -2708,6 +2708,7 @@ var DOMPatch = class {
           if (fromEl.type === "number" && fromEl.validity && fromEl.validity.badInput) {
             return false;
           }
+          const originalEl = fromEl;
           fromEl = this.maybeCloneLockedElement(fromEl, isFocusedFormEl);
           if (dom_default.isPhxChild(toEl)) {
             const prevSession = fromEl.getAttribute(PHX_SESSION);
@@ -2749,7 +2750,7 @@ var DOMPatch = class {
             dom_default.syncAttrsToProps(toEl);
             dom_default.applyStickyOperations(toEl);
             this.trackBeforeUpdated(fromEl, toEl);
-            return fromEl;
+            return fromEl === originalEl ? true : fromEl;
           }
         }
       };

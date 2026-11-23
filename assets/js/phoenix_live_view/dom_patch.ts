@@ -438,6 +438,7 @@ export default class DOMPatch {
           // We keep a reference to the cloned tree in the element's private data, and
           // on ack (view.undoRefs), we morph the cloned tree with the true fromEl in the DOM to
           // apply any changes that happened while the element was locked.
+          const originalEl = fromEl;
           fromEl = this.maybeCloneLockedElement(fromEl, isFocusedFormEl);
 
           // nested view handling
@@ -503,7 +504,10 @@ export default class DOMPatch {
             DOM.syncAttrsToProps(toEl);
             DOM.applyStickyOperations(toEl);
             this.trackBeforeUpdated(fromEl, toEl);
-            return fromEl;
+            // Return an element only for a clone: morphdom re-indexes the subtree
+            // of any element returned here, which for the original element
+            // repeats the initial index once per ancestor on every patch.
+            return fromEl === originalEl ? true : fromEl;
           }
         },
       };

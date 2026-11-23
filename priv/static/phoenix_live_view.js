@@ -2773,6 +2773,7 @@ removing illegal node: "${("outerHTML" in childNode && childNode.outerHTML || ch
             if (fromEl.type === "number" && fromEl.validity && fromEl.validity.badInput) {
               return false;
             }
+            const originalEl = fromEl;
             fromEl = this.maybeCloneLockedElement(fromEl, isFocusedFormEl);
             if (dom_default.isPhxChild(toEl)) {
               const prevSession = fromEl.getAttribute(PHX_SESSION);
@@ -2814,7 +2815,7 @@ removing illegal node: "${("outerHTML" in childNode && childNode.outerHTML || ch
               dom_default.syncAttrsToProps(toEl);
               dom_default.applyStickyOperations(toEl);
               this.trackBeforeUpdated(fromEl, toEl);
-              return fromEl;
+              return fromEl === originalEl ? true : fromEl;
             }
           }
         };
